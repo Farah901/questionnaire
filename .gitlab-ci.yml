@@ -1,0 +1,31 @@
+image: node:16
+
+stages:
+  - build
+  - deploy
+
+variables:
+  CI_NODE_ENV: "production"
+  NODE_ENV: "production"
+
+before_script:
+  - npm install
+
+build:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - build
+
+pages:
+  stage: deploy
+  script:
+    # Déplace les fichiers générés dans le dossier 'public' de GitLab Pages
+    - mv build/* public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
